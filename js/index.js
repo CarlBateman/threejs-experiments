@@ -36,18 +36,29 @@
 
 
 
-  const geometry = new THREE.BoxGeometry();
+  const boxGeometry = new THREE.BoxGeometry();
   const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
 
-  let cubes = [];
+  let models = [];
   for (var i = 0; i < 10; i++) {
     const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.name = i;
+    const cube = new THREE.Mesh(boxGeometry, material);
+    //cube.name = i;
 
     cube.position.set(-5 + Math.random() * 10, -5 + Math.random() * 10, -5 + Math.random() * 10);
     scene.add(cube);
-    cubes.push(cube);
+    models.push(cube);
+  }
+
+  const sphereGeometry = new THREE.SphereGeometry();
+  for (var i = 0; i < 10; i++) {
+    const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    const cube = new THREE.Mesh(sphereGeometry, material);
+    //cube.name = i;
+
+    cube.position.set(-5 + Math.random() * 10, -5 + Math.random() * 5, -5 + Math.random() * 10);
+    scene.add(cube);
+    models.push(cube);
   }
 
   // "back splash"
@@ -96,8 +107,8 @@
   }
 
   function onPointerUp(event) {
-    for (let i = 0; i < cubes.length; i++) {
-      cubes[i].material.color.set(0xffffff);
+    for (let i = 0; i < models.length; i++) {
+      models[i].material.color.set(0xffffff);
     }
 
     endPt.set(event.clientX, event.clientY);
@@ -211,16 +222,16 @@
     // find all objects between all planes
     // 1. check position - definitely inside
 
-    for (let i = 0; i < cubes.length; i++) {
-      let distLft = planeLft.distanceToPoint(cubes[i].position);
-      let distRgt = planeRgt.distanceToPoint(cubes[i].position);
-      let distBot = planeBot.distanceToPoint(cubes[i].position);
-      let distTop = planeTop.distanceToPoint(cubes[i].position);
+    for (let i = 0; i < models.length; i++) {
+      let distLft = planeLft.distanceToPoint(models[i].position);
+      let distRgt = planeRgt.distanceToPoint(models[i].position);
+      let distBot = planeBot.distanceToPoint(models[i].position);
+      let distTop = planeTop.distanceToPoint(models[i].position);
       //if (dist0 * dist2 < 0 && dist1 * dist3 < 0)
 
       //if (distBot > 0 && distTop < 0 && distLft < 0 && distRgt > 0)
       if (distTop > 0 && distBot > 0 && distLft > 0 && distRgt > 0)
-        cubes[i].material.color.set(0xff0000);
+        models[i].material.color.set(0xff0000);
     }
 
 
