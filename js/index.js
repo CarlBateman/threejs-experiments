@@ -61,6 +61,17 @@
     models.push(cube);
   }
 
+  const cylinderGeometry = new THREE.CylinderGeometry();
+  for (var i = 0; i < 10; i++) {
+    const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    const cube = new THREE.Mesh(cylinderGeometry, material);
+    //cube.name = i;
+
+    cube.position.set(-5 + Math.random() * 10, -5 + Math.random() * 5, -5 + Math.random() * 10);
+    scene.add(cube);
+    models.push(cube);
+  }
+
   // "back splash"
   const geometry1 = new THREE.PlaneGeometry(1000, 1000);
   const material1 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide });
