@@ -1,0 +1,74 @@
+﻿TO DO
+"simple" editor
+
+Fix relative position for selection helper
+Simplify creation of planes?
+
+menu/button control selection type (whole object, partial object)
+
+drag select all items inside selection
+drag select all items intersecting selection
+
+group selected into base and move, rotate, scale
+
+select object, face, edge, vertex
+undo/redo
+three.js helpers
+
+add to selection
+remove from selection
+
+
+find all object3Ds that are wholly inside the selection volume
+find all object3Ds that are partially or wholly inside the selection volume - watch out for intersections
+
+	* INTERSECTIONS
+	* ENCLOSED
+
+	find candidates further checks
+	quick test - is centroid inside - then intersection selected
+	does bounding box intersect
+	-- if only one vertex is inside then must be an intersection (which is quicker, point inside or face intersects?)
+
+
+
+Is position a valid centre for all objects?
+instanced geometry, model, bounding box, bounding sphere
+
+
+NOW/NEXT
+find Intersected Objects
+check other object vertices
+
+
+INTERMEDIATE
+
+-=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=-
+
+-=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
+
+	helpers don't work when in arrays (is it helpers or planes?)
+	helper has unused param
+
+-=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
+
+
+-=≡ TEST ≡=-
+
+
+DONE
+click select
+Use "backdrop" to build plane for selection area -> volume
+use selection box helper
+move/rotate camera
+start selection on mouse down, finish on mouse up
+show planes
+show selction area
+	const helper = new SelectionHelper( selectionBox, renderer, 'selectBox' );
+clear any previous selection when starting
+
+backdrop -> invisible, billboard, child of camera
+	if child of camera won't need billboad
+	layer?
+	intersect with invisible?
+	draw selection area
