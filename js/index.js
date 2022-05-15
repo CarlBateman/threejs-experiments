@@ -9,7 +9,6 @@
   camera.position.z = 10;
   camera.position.x = 5;
   camera.lookAt(0, 0, 0);
-  scene.add(camera);
 
   const helper = new SelectionHelper(renderer, 'selectBox');
 
@@ -71,16 +70,6 @@
     scene.add(cube);
     models.push(cube);
   }
-
-  // "back splash"
-  const geometry1 = new THREE.PlaneGeometry(1000, 1000);
-  const material1 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide });
-  const backSplash = new THREE.Mesh(geometry1, material1);
-  backSplash.name = "back";
-  backSplash.position.set(0, 0, -100);
-  //backSplash.rotation.set(Math.PI / 10, Math.PI / 10, Math.PI / 10);
-  camera.add(backSplash);
-  //scene.add(backSplash);
 
 
   const planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
@@ -175,39 +164,60 @@
       pointerTR.y = pointer0.y;
     }
 
-    const raycasterBL = new THREE.Raycaster();
-    raycasterBL.setFromCamera(pointerBL, camera);
-    const intersectsBL = raycasterBL.intersectObjects(scene.children);
 
-    const raycasterTR = new THREE.Raycaster();
-    raycasterTR.setFromCamera(pointerTR, camera);
-    const intersectsTR = raycasterTR.intersectObjects(scene.children);
-
-    // left plane
-    // formed from camera position, bottom left intersection point and camera up vector
-    let offset = camera.position.clone().add(camera.up);
-    planeLft.setFromCoplanarPoints(camera.position, intersectsBL[0].point, offset);
-
-    // right plane
-    // formed from camera position, camera up vector and top right intersection point
-    planeRgt.setFromCoplanarPoints(camera.position, offset, intersectsTR[0].point);
-
-
-    // bottom plane
-    // formed from camera position, camera right vector and bottom left intersection point
     // we need to calculate the camera right vector
     let cameraRightVector = new THREE.Vector3();
     camera.getWorldDirection(cameraRightVector);
     cameraRightVector.cross(camera.up);
+
+    // construct back plane to project on to (only need to once, then update if camera moves)
+    let fwd = new THREE.Vector3();
+    camera.getWorldDirection(fwd);
+
+    let vToPlane = fwd.multiplyScalar(camera.far);
+
+    let v1 = camera.position.clone().add(vToPlane);
+    let v2 = v1.clone().add(cameraRightVector);
+    let v3 = v1.clone().add(camera.up);
+
+
+    planeFar.setFromCoplanarPoints(v1, v2, v3);
+    //const helperFar = new THREE.PlaneHelper(planeFar, 1000, 0xffff00);
+    //scene.add(helperFar);
+
+
+
+    const raycasterBL = new THREE.Raycaster();
+    raycasterBL.setFromCamera(pointerBL, camera);
+
+    const intersectsBL1 = new THREE.Vector3();
+    raycasterBL.ray.intersectPlane(planeFar, intersectsBL1);
+
+
+    const raycasterTR = new THREE.Raycaster();
+    raycasterTR.setFromCamera(pointerTR, camera);
+
+    const intersectsTR1 = new THREE.Vector3();
+    raycasterTR.ray.intersectPlane(planeFar, intersectsTR1);
+
+    // left plane
+    // formed from camera position, bottom left intersection point and camera up vector
+    let offset = camera.position.clone().add(camera.up);
+    planeLft.setFromCoplanarPoints(camera.position, intersectsBL1, offset);
+
+    // right plane
+    // formed from camera position, camera up vector and top right intersection point
+    planeRgt.setFromCoplanarPoints(camera.position, offset, intersectsTR1);
+
+
+    // bottom plane
+    // formed from camera position, camera right vector and bottom left intersection point
     offset = camera.position.clone().add(cameraRightVector);
-    planeBot.setFromCoplanarPoints(camera.position, offset, intersectsBL[0].point);
+    planeBot.setFromCoplanarPoints(camera.position, offset, intersectsBL1);
 
     // top plane
     // formed from camera position, top right intersection point and camera right vector
-    planeTop.setFromCoplanarPoints(camera.position, intersectsTR[0].point, offset);
-
-    // far plane - aasumes backSpalsh is at limit of detection
-    planeFar.setFromCoplanarPoints(backSplash.position, intersectsBL[0].point, intersectsTR[0].point);
+    planeTop.setFromCoplanarPoints(camera.position, intersectsTR1, offset);
 
     // near plane
     let up = camera.position.clone().add(camera.up);
