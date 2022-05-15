@@ -1,6 +1,19 @@
 ﻿TO DO
 "simple" editor
 
+NOW/NEXT
+set and restore colours
+
+find Intersected Objects
+check other object vertices
+
+
+INTERMEDIATE
+
+-=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=-
+
+OUTSTANDING
+
 Fix relative position for selection helper
 Simplify creation of planes?
 
@@ -36,14 +49,6 @@ Is position a valid centre for all objects?
 instanced geometry, model, bounding box, bounding sphere
 
 
-NOW/NEXT
-find Intersected Objects
-check other object vertices
-
-
-INTERMEDIATE
-
--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=--=≡≡=-
 
 -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
 
