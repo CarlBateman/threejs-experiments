@@ -48,12 +48,16 @@ find all object3Ds that are partially or wholly inside the selection volume - wa
 Is position a valid centre for all objects?
 instanced geometry, model, bounding box, bounding sphere
 
+optimise by merging vertices
+
 
 
 -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
 
 	helpers don't work when in arrays (is it helpers or planes?)
-	helper has unused param
+	planes block raycaster pick
+	bounding boxes are static
+	xxx helper has unused param xxx
 
 -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
 
