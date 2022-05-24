@@ -7,7 +7,6 @@
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 10;
-  //camera.position.x = 5;
   camera.lookAt(0, 0, 0);
 
   const helper = new SelectionHelper(renderer, 'selectBox');
@@ -22,21 +21,18 @@
   light.castShadow = true;
   scene.add(light);
 
-
-  ////const geometry2 = new THREE.SphereGeometry();
-  ////const material2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-  ////const sphere = new THREE.Mesh(geometry2, material2);
-  ////////sphere.position.set(2, 0, -5);
-  ////sphere.scale.set(.1, .1, .1);
-  ////scene.add(sphere);
-  //////camera.add(sphere);
-  ////////camera.remove(sphere);
-  //////sphere.position.set(2, 0, -5);
-  ////////sphere.position.set(0, 0, -10);
-
-
+  const holdall = new THREE.Object3D();
+  scene.add(holdall);
 
   const boxGeometry = new THREE.BoxGeometry();
+  let boxGeometry2 = new THREE.BoxGeometry();
+  boxGeometry2.deleteAttribute('normal');
+  boxGeometry2.deleteAttribute('uv');
+  boxGeometry2 = THREE.BufferGeometryUtils.mergeVertices(boxGeometry2);
+
+  const vertices = boxGeometry.getAttribute('position');
+  const vertices2 = boxGeometry2.getAttribute('position');
+
   const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
 
   let models = [];
@@ -44,30 +40,56 @@
     for (let i = 0; i < 10; i++) {
       const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
       const cube = new THREE.Mesh(boxGeometry, material);
-      //cube.name = i;
 
-      //cube.geometry.computeBoundingBox();
       cube.position.set(-15 + Math.random() * 30, Math.random() * 10, -15 + Math.random() * 30);
       cube.rotation.set(-5 + Math.random() * 10, -5 + Math.random() * 10, -5 + Math.random() * 10);
       cube.scale.set(0.1 + Math.random() * 5, 0.1 + Math.random() * 5, 0.1 + Math.random() * 5);
 
       scene.add(cube);
       models.push(cube);
-
-      //const box = new THREE.BoxHelper(cube, 0xffff00);
-      //scene.add(box);
     }
   } else {
-    for (let i = 0; i < 1; i++) {
-      const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
-      const cube = new THREE.Mesh(boxGeometry, material);
+    let radius = 1;
+    let spacing = radius * 1.5;
+    let count = 5;
+    let offset = count / 2;
+    for (let i = 0; i < count; i++) {
+      for (let j = 0; j < count; j++) {
+        const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+        const cube = new THREE.Mesh(boxGeometry, material);
+        cube.position.set(offset - i * spacing, offset - j * spacing, 0);
+        holdall.add(cube);
+        models.push(cube);
+      }
+    }
 
-      //cube.position.set(6, 6, 0);
-      //cube.position.set(-10 + i * 3, 0, 0);
-      //cube.rotation.set(Math.PI / 10, 0, 0);
-      cube.scale.set(5, 5, 5);
-      scene.add(cube);
-      models.push(cube);
+    radius *= 2;
+    spacing = radius * 1.5;
+    offset *= 2;
+    for (let i = 0; i < count; i++) {
+      for (let j = 0; j < count; j++) {
+        const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+        const cube = new THREE.Mesh(boxGeometry, material);
+        cube.position.set(offset - i * spacing, offset - j * spacing, -spacing);
+        cube.scale.set(2, 2, 2);
+        holdall.add(cube);
+        models.push(cube);
+      }
+    }
+  }
+
+  function onKeyUp(e) {
+    if (e.keyCode == 37) {
+      holdall.rotation.y += .01;
+    }
+    if (e.keyCode == 39) {
+      holdall.rotation.y -= .01;
+    }
+    if (e.keyCode == 38) {
+      holdall.rotation.x += .01;
+    }
+    if (e.keyCode == 40) {
+      holdall.rotation.x -= .01;
     }
   }
 
@@ -101,17 +123,12 @@
   //  //scene.add(box);
   //}
 
-
-
-
   const _frustum = new THREE.Frustum();
 
   let startPt = new THREE.Vector2(0, 0);
   let endPt = new THREE.Vector2(0, 0);
 
   function onPointerDown(event) {
-    //camera.layers.disable(1);
-
     startPt.set(event.clientX, event.clientY);
   }
 
@@ -126,16 +143,12 @@
     // calculate pointer position in normalized device coordinates
     // (-1 to +1) for both components
     let rect = renderer.domElement.getBoundingClientRect();
-    //pointer.x = event.clientX - rect.left;
-    //pointer.y = event.clientY - rect.top;
-
     pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     pointer.y = - ((event.clientY - rect.top) / rect.height) * 2 + 1;
 
 
     if (startPt.distanceToSquared(endPt) < 25) {
       pickPoint(pointer);
-      //console.log(pointer);
     } else {
       const pointer2 = new THREE.Vector2();
       pointer2.x = ((startPt.x - rect.left) / rect.width) * 2 - 1;
@@ -145,17 +158,9 @@
   }
 
   function pickPoint(pointer) {
-    //planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -110);
-    _frustum.planes[0] = null;
-
-
     const raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(pointer, camera);
     const intersects = raycaster.intersectObjects(scene.children);
-
-    //if (intersects1) {
-    //  sphere.position.set(intersects1[0].point.x, intersects1[0].point.y, intersects1[0].point.z);
-    //}
 
     for (let i = 0; i < intersects.length; i++) {
       intersects[i].object.material.color.set(0xff0000);
@@ -165,25 +170,9 @@
 
   function selectArea(pointer0, pointer1) {
     let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    //const helper0 = new THREE.PlaneHelper(plane0, 10, 0xffff00);
-    //helper0.layers.set(1);
-    //scene.add(helper0);
-
     let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    //const helper1 = new THREE.PlaneHelper(plane1, 10, 0xffff00);
-    //helper1.layers.set(1);
-    //scene.add(helper1);
-
     let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    //const helper2 = new THREE.PlaneHelper(plane2, 10, 0xffff00);
-    //helper2.layers.set(1);
-    //scene.add(helper2);
-
     let planeTop = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    //const helper3 = new THREE.PlaneHelper(plane3, 10, 0xffff00);
-    //helper3.layers.set(1);
-    //scene.add(helper3);
-
     let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
     let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
 
@@ -197,7 +186,6 @@
       pointerBL.y = pointer1.y;
       pointerTR.y = pointer0.y;
     }
-
 
     // we need to calculate the camera right vector
     let cameraRightVector = new THREE.Vector3();
@@ -214,11 +202,7 @@
     let v2 = v1.clone().add(cameraRightVector);
     let v3 = v1.clone().add(camera.up);
 
-
     planeFar.setFromCoplanarPoints(v1, v2, v3);
-    //const helperFar = new THREE.PlaneHelper(planeFar, 1000, 0xffff00);
-    //scene.add(helperFar);
-
 
     // near plane
     camera.getWorldDirection(fwd);
@@ -230,10 +214,6 @@
 
     //let up = camera.position.clone().add(camera.up);
     planeNear.setFromCoplanarPoints(v1, v3, v2);
-
-
-
-
 
     const raycasterBL = new THREE.Raycaster();
     raycasterBL.setFromCamera(pointerBL, camera);
@@ -276,56 +256,112 @@
     planes[4] = planeNear;
     planes[5] = planeFar;
 
-    findIntersectedObjects();
+    // if left to right enclosed
+    // if right to left any partially selected
+    if (pointer0.x < pointer1.x) {
+      findIntersectedObjects(pointerBL, pointerTR);
+    } else {
+      findEnclosedObjects(pointerBL, pointerTR);
+    }
   }
 
-  function findEnclosedObjects() {
+  // wholly enclosed - all points inside
+  function findEnclosedObjects(pointerBL, pointerTR) {
+    let found = false;
+    for (let i = 0; i < models.length; i++) {
+      // reject outside
+      if (_frustum.intersectsObject(models[i]) === false) continue;
+
+      // if any of the selection frustum corners intersects then can't be wholly inside3
+      if (intersectPointerObject(pointerBL, models[i])) {
+        continue;
+      }
+
+      if (intersectPointerObject(pointerTR, models[i])) {
+        continue;
+      }
+
+      if (intersectPointerObject(new THREE.Vector2(pointerTR.x, pointerBL.y), models[i])) {
+        continue;
+      }
+
+      if (intersectPointerObject(new THREE.Vector2(pointerBL.x, pointerTR.y), models[i])) {
+        continue;
+      }
+
+      // all points inside frustum
+      const vertices = models[i].geometry.getAttribute('position').clone().applyMatrix4(models[i].matrixWorld);
+
+      let cnt = 0;
+      for (let j = 0; j < vertices.array.length; j += 3) {
+        let point = new THREE.Vector3(vertices.array[j], vertices.array[j + 1], vertices.array[j + 2]);
+        if (_frustum.containsPoint(point)) {
+          cnt++;
+        }
+      }
+      if (cnt === vertices.array.length / 3) {
+        models[i].material.color.set(0xff0000);
+      }
+    }
 
   }
 
-  function findIntersectedObjects() {
+  function intersectPointerObject(pointer, object) {
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(pointer, camera);
+    return raycaster.intersectObjects([object]).length > 0;
+  }
+
+  function findIntersectedObjects(pointerBL, pointerTR) {
     // inside frustum? orientation of plane?
     let found = false;
     for (let i = 0; i < models.length; i++) {
       // quick selected
       // centre is inside frustum
-      ////if (_frustum.containsPoint(models[i].position)) {
-      ////  models[i].material.color.set(0xff0000);
-      ////  continue;
-      ////}
+      if (_frustum.containsPoint(models[i].position)) {
+        models[i].material.color.set(0xff0000);
+        continue;
+      }
 
-      ////// quick rejections
-      ////// bounding sphere is wholly outside selection frustum 
-      //////if (_frustum.intersectsObject(models[i]) === false) continue;
+      // the selection can be wholly inside the object
+      // does a corner of the selection frustum intersect this object
+      // test all corners if true may save an intersection test, etc.
+      if (intersectPointerObject(pointerBL, models[i])) {
+        models[i].material.color.set(0xff0000);
+        continue;
+      }
 
-      //////if (models[i].geometry.boundingBox === null) {
-      //////  models[i].geometry.computeBoundingBox();
-      //////}
+      if (intersectPointerObject(pointerTR, models[i])) {
+        models[i].material.color.set(0xff0000);
+        continue;
+      }
 
-      //////let box = new THREE.Box3();
-      //////box.copy(models[i].geometry.boundingBox).applyMatrix4(models[i].matrixWorld);
+      if (intersectPointerObject(new THREE.Vector2(pointerTR.x, pointerBL.y), models[i])) {
+        models[i].material.color.set(0xff0000);
+        continue;
+      }
 
-      //////// bounding box is wholly outside selection frustum 
-      //////if (_frustum.intersectsBox(box) === false) {
-      //////  //models[i].material.color.set(0xff0000);
-      //////  continue;
-      //////}
+      if (intersectPointerObject(new THREE.Vector2(pointerBL.x, pointerTR.y), models[i])) {
+        models[i].material.color.set(0xff0000);
+        continue;
+      }
 
-      //////box = models[i].clone();
-      //////box.applyMatrix4(models[i].matrixWorld);
-      ////const vertices1 = models[i].geometry.getAttribute('position');
+      // quick rejections
+      // bounding sphere is wholly outside selection frustum 
+      if (_frustum.intersectsObject(models[i]) === false) continue;
+
       const vertices = models[i].geometry.getAttribute('position').clone().applyMatrix4(models[i].matrixWorld);
 
-      ////// any point is inside frustum
-      ////for (let j = 0; j < vertices.array.length; j += 3) {
-      ////  let point = new THREE.Vector3(vertices.array[j], vertices.array[j+1], vertices.array[j+2]);
-      ////  if (_frustum.containsPoint(point)) {
-      ////    models[i].material.color.set(0xff0000);
-      ////    j = vertices.array.length;
-      ////    found = true;
-      ////  }
-      ////}
-      ////if (found) continue;
+      // any point is inside frustum
+      for (let j = 0; j < vertices.array.length; j += 3) {
+        let point = new THREE.Vector3(vertices.array[j], vertices.array[j+1], vertices.array[j+2]);
+        if (_frustum.containsPoint(point)) {
+          models[i].material.color.set(0xff0000);
+          j = vertices.array.length;
+          found = true;
+        }
+      }
+      if (found) continue;
 
       // faces for indexed geometry
       //const index = geometry.getIndex();
@@ -343,74 +379,43 @@
       //  const c = i + 2;
       //}
 
-      // faces
+      // check whether any lines intersect the selcetion frustum
       const indices = models[i].geometry.index.array;
-      found = found;
-      for (let j = 0; j < indices.length; j+=3) {
-        const a = indices[j] * 3;
-        const b = indices[j + 1] * 3;
-        const c = indices[j + 2] * 3;
 
-        let pointA = new THREE.Vector3(vertices.array[a], vertices.array[a + 1], vertices.array[a + 2]);
-        let pointB = new THREE.Vector3(vertices.array[b], vertices.array[b + 1], vertices.array[b + 2]);
-        let pointC = new THREE.Vector3(vertices.array[c], vertices.array[c + 1], vertices.array[c + 2]);
+      if (checkFrustumLineIntersection(vertices, indices, _frustum))
+        models[i].material.color.set(0xff0000);
+    }
+  }
 
-        let lineAB = new THREE.Line3(pointA, pointB);
-        let lineBC = new THREE.Line3(pointB, pointC);
-        let lineCA = new THREE.Line3(pointC, pointA);
-        for (let k = 0; k < 6; k++) {
-          let intersects = _frustum.planes[k].intersectsLine(lineAB);
+  function checkFrustumLineIntersection(vertices, indices, frustum) {
+    for (let i = 0; i < indices.length; i += 3) {
+      const a = indices[i] * 3;
+      const b = indices[i + 1] * 3;
+      const c = indices[i + 2] * 3;
+
+      let pointA = new THREE.Vector3(vertices.array[a], vertices.array[a + 1], vertices.array[a + 2]);
+      let pointB = new THREE.Vector3(vertices.array[b], vertices.array[b + 1], vertices.array[b + 2]);
+      let pointC = new THREE.Vector3(vertices.array[c], vertices.array[c + 1], vertices.array[c + 2]);
+
+      let lines = []
+      lines.push(new THREE.Line3(pointA, pointB));
+      lines.push(new THREE.Line3(pointB, pointC));
+      lines.push(new THREE.Line3(pointC, pointA));
+      for (let j = 0; j < 6; j++) {
+        for (let k = 0; k < lines.length; k++) {
+          let intersects = _frustum.planes[j].intersectsLine(lines[k]);
           if (intersects) {
             let intersection = new THREE.Vector3();
-            _frustum.planes[k].intersectLine(lineAB, intersection);
+            frustum.planes[j].intersectLine(lines[k], intersection);
 
-            if (_frustum.containsPoint(intersection)) {
-              models[i].material.color.set(0xff0000);
-              k = 6;
-              found = true;
-              //sphere.position.set(intersection.x, intersection.y, intersection.z);
+            if (frustum.containsPoint(intersection)) {
+              return true;
             }
-
           }
         }
       }
-      // face edges
-
-      //for (let i = 0; i < models.length; i++) {
-      //  let distLft = planeLft.distanceToPoint(models[i].position);
-      //  let distRgt = planeRgt.distanceToPoint(models[i].position);
-      //  let distBot = planeBot.distanceToPoint(models[i].position);
-      //  let distTop = planeTop.distanceToPoint(models[i].position);
-      //  //if (dist0 * dist2 < 0 && dist1 * dist3 < 0)
-
-      //  //if (distBot > 0 && distTop < 0 && distLft < 0 && distRgt > 0)
-      //  if (distTop > 0 && distBot > 0 && distLft > 0 && distRgt > 0)
-      //    models[i].material.color.set(0xff0000);
-      //}
-
     }
-
-
-
-    // For plane
-    // .distanceToSphere
-    // .intersectsBox
-    // .intersectsLine
-    // .intersectsSphere
-
-    // For frustum
-    // .containsPoint
-    // .intersectsBox
-    // .intersectsObject
-    // .intersectsSphere
-
-
-    // 2. check other vertices - either of geometry or bounding sphere/box
-    //    bound is approximate (unless for sphere or box) but if all points on one side then no intersection
-    // 3. check lines (not faces) .intersectsLine
-
-    // EXCLUDE items behind viewer!!!
-
+    return false;
   }
 
 
@@ -432,6 +437,7 @@
   //renderer.domElement.addEventListener('pointermove', onPointerMove);
   renderer.domElement.addEventListener('pointerup', onPointerUp);
   renderer.domElement.addEventListener('pointerdown', onPointerDown);
+  document.addEventListener('keyup', onKeyUp);
 
   function onWindowResize() {
 
