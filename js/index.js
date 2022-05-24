@@ -12,26 +12,27 @@
 
   const helper = new SelectionHelper(renderer, 'selectBox');
 
-  var ambientLightColour = new THREE.Color(0.5, 0.5, 0.5);
+  let ambientLightColour = new THREE.Color(0.5, 0.5, 0.5);
   const ambientLight = new THREE.AmbientLight(ambientLightColour);
   scene.add(ambientLight);
 
-  var directionalLightColour = new THREE.Color(0.9, 0.9, 0.9);
+  let directionalLightColour = new THREE.Color(0.9, 0.9, 0.9);
   const light = new THREE.PointLight(directionalLightColour, 1.0);
   //light.shadowCameraVisible = true;
   light.castShadow = true;
   scene.add(light);
 
 
-  //const geometry2 = new THREE.SphereGeometry(1);
-  //const material2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-  //const sphere = new THREE.Mesh(geometry2, material2);
-  //sphere.position.set(2, 0, -5);
-  //scene.add(sphere);
-  //camera.add(sphere);
-  ////camera.remove(sphere);
-  //sphere.position.set(2, 0, -5);
-  ////sphere.position.set(0, 0, -10);
+  ////const geometry2 = new THREE.SphereGeometry();
+  ////const material2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+  ////const sphere = new THREE.Mesh(geometry2, material2);
+  ////////sphere.position.set(2, 0, -5);
+  ////sphere.scale.set(.1, .1, .1);
+  ////scene.add(sphere);
+  //////camera.add(sphere);
+  ////////camera.remove(sphere);
+  //////sphere.position.set(2, 0, -5);
+  ////////sphere.position.set(0, 0, -10);
 
 
 
@@ -39,9 +40,9 @@
   const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
 
   let models = [];
-  if (true) {
-    for (var i = 0; i < 10; i++) {
-      const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+  if (false) {
+    for (let i = 0; i < 10; i++) {
+      const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
       const cube = new THREE.Mesh(boxGeometry, material);
       //cube.name = i;
 
@@ -57,20 +58,21 @@
       //scene.add(box);
     }
   } else {
-    for (var i = 0; i < 1; i++) {
-      const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+    for (let i = 0; i < 1; i++) {
+      const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
       const cube = new THREE.Mesh(boxGeometry, material);
 
-      //cube.position.set(-5 + i * 2, 0, 0);
+      //cube.position.set(6, 6, 0);
+      //cube.position.set(-10 + i * 3, 0, 0);
       //cube.rotation.set(Math.PI / 10, 0, 0);
-      //cube.scale.set(1, 5, 1);
+      cube.scale.set(5, 5, 5);
       scene.add(cube);
       models.push(cube);
     }
   }
 
   //const sphereGeometry = new THREE.SphereGeometry();
-  //for (var i = 0; i < 10; i++) {
+  //for (let i = 0; i < 10; i++) {
   //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
   //  const cube = new THREE.Mesh(sphereGeometry, material);
   //  //cube.name = i;
@@ -85,7 +87,7 @@
   //}
 
   //const cylinderGeometry = new THREE.CylinderGeometry();
-  //for (var i = 0; i < 10; i++) {
+  //for (let i = 0; i < 10; i++) {
   //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
   //  const cube = new THREE.Mesh(cylinderGeometry, material);
   //  //cube.name = i;
@@ -123,7 +125,7 @@
     const pointer = new THREE.Vector2();
     // calculate pointer position in normalized device coordinates
     // (-1 to +1) for both components
-    var rect = renderer.domElement.getBoundingClientRect();
+    let rect = renderer.domElement.getBoundingClientRect();
     //pointer.x = event.clientX - rect.left;
     //pointer.y = event.clientY - rect.top;
 
@@ -275,13 +277,6 @@
     planes[5] = planeFar;
 
     findIntersectedObjects();
-
-    //planeTop = null;
-    //planeRgt = null;
-    //planeBot = null;
-    //planeLft = null;
-    //planeNear = null;
-    //planeFar = null;
   }
 
   function findEnclosedObjects() {
@@ -294,43 +289,92 @@
     for (let i = 0; i < models.length; i++) {
       // quick selected
       // centre is inside frustum
-      if (_frustum.containsPoint(models[i].position)) {
-        models[i].material.color.set(0xff0000);
-        continue;
-      }
+      ////if (_frustum.containsPoint(models[i].position)) {
+      ////  models[i].material.color.set(0xff0000);
+      ////  continue;
+      ////}
 
-      // quick rejections
-      // bounding sphere is wholly outside selection frustum 
-      //if (_frustum.intersectsObject(models[i]) === false) continue;
+      ////// quick rejections
+      ////// bounding sphere is wholly outside selection frustum 
+      //////if (_frustum.intersectsObject(models[i]) === false) continue;
 
-      //if (models[i].geometry.boundingBox === null) {
-      //  models[i].geometry.computeBoundingBox();
-      //}
+      //////if (models[i].geometry.boundingBox === null) {
+      //////  models[i].geometry.computeBoundingBox();
+      //////}
 
-      //let box = new THREE.Box3();
-      //box.copy(models[i].geometry.boundingBox).applyMatrix4(models[i].matrixWorld);
+      //////let box = new THREE.Box3();
+      //////box.copy(models[i].geometry.boundingBox).applyMatrix4(models[i].matrixWorld);
 
-      //// bounding box is wholly outside selection frustum 
-      //if (_frustum.intersectsBox(box) === false) {
-      //  //models[i].material.color.set(0xff0000);
-      //  continue;
-      //}
+      //////// bounding box is wholly outside selection frustum 
+      //////if (_frustum.intersectsBox(box) === false) {
+      //////  //models[i].material.color.set(0xff0000);
+      //////  continue;
+      //////}
 
-      //box = models[i].clone();
-      //box.applyMatrix4(models[i].matrixWorld);
-      const vertices1 = models[i].geometry.getAttribute('position');
+      //////box = models[i].clone();
+      //////box.applyMatrix4(models[i].matrixWorld);
+      ////const vertices1 = models[i].geometry.getAttribute('position');
       const vertices = models[i].geometry.getAttribute('position').clone().applyMatrix4(models[i].matrixWorld);
 
-      // any point is inside frustum
-      for (let j = 0; j < vertices.array.length; j += 3) {
-        let point = new THREE.Vector3(vertices.array[j], vertices.array[j+1], vertices.array[j+2]);
-        if (_frustum.containsPoint(point)) {
-          models[i].material.color.set(0xff0000);
-          j = vertices.array.length;
-          found = true;
+      ////// any point is inside frustum
+      ////for (let j = 0; j < vertices.array.length; j += 3) {
+      ////  let point = new THREE.Vector3(vertices.array[j], vertices.array[j+1], vertices.array[j+2]);
+      ////  if (_frustum.containsPoint(point)) {
+      ////    models[i].material.color.set(0xff0000);
+      ////    j = vertices.array.length;
+      ////    found = true;
+      ////  }
+      ////}
+      ////if (found) continue;
+
+      // faces for indexed geometry
+      //const index = geometry.getIndex();
+      //for (let i = 0; i < index.count; i += 3) {
+      //  const a = index.getX(i);
+      //  const b = index.getX(i + 1);
+      //  const c = index.getX(i + 2);
+      //}
+      //
+      // faces for un-indexed geometry
+      //const position = geometry.getAttribute('position');
+      //for (let i = 0; i < position.count; i += 3) {
+      //  const a = i;
+      //  const b = i + 1;
+      //  const c = i + 2;
+      //}
+
+      // faces
+      const indices = models[i].geometry.index.array;
+      found = found;
+      for (let j = 0; j < indices.length; j+=3) {
+        const a = indices[j] * 3;
+        const b = indices[j + 1] * 3;
+        const c = indices[j + 2] * 3;
+
+        let pointA = new THREE.Vector3(vertices.array[a], vertices.array[a + 1], vertices.array[a + 2]);
+        let pointB = new THREE.Vector3(vertices.array[b], vertices.array[b + 1], vertices.array[b + 2]);
+        let pointC = new THREE.Vector3(vertices.array[c], vertices.array[c + 1], vertices.array[c + 2]);
+
+        let lineAB = new THREE.Line3(pointA, pointB);
+        let lineBC = new THREE.Line3(pointB, pointC);
+        let lineCA = new THREE.Line3(pointC, pointA);
+        for (let k = 0; k < 6; k++) {
+          let intersects = _frustum.planes[k].intersectsLine(lineAB);
+          if (intersects) {
+            let intersection = new THREE.Vector3();
+            _frustum.planes[k].intersectLine(lineAB, intersection);
+
+            if (_frustum.containsPoint(intersection)) {
+              models[i].material.color.set(0xff0000);
+              k = 6;
+              found = true;
+              //sphere.position.set(intersection.x, intersection.y, intersection.z);
+            }
+
+          }
         }
       }
-      if (found) continue;
+      // face edges
 
       //for (let i = 0; i < models.length; i++) {
       //  let distLft = planeLft.distanceToPoint(models[i].position);
