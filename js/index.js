@@ -80,16 +80,16 @@
 
   function onKeyUp(e) {
     if (e.keyCode == 37) {
-      holdall.rotation.y += .01;
-    }
-    if (e.keyCode == 39) {
       holdall.rotation.y -= .01;
     }
+    if (e.keyCode == 39) {
+      holdall.rotation.y += .01;
+    }
     if (e.keyCode == 38) {
-      holdall.rotation.x += .01;
+      holdall.rotation.x -= .01;
     }
     if (e.keyCode == 40) {
-      holdall.rotation.x -= .01;
+      holdall.rotation.x += .01;
     }
   }
 
