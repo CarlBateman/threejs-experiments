@@ -6,10 +6,14 @@
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 10;
+  camera.position.z = 30;
   camera.lookAt(0, 0, 0);
+  camera.layers.enable(1);
 
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enabled = false;
   const helper = new SelectionHelper(renderer, 'selectBox');
+  helper.enabled = true;
 
   let ambientLightColour = new THREE.Color(0.5, 0.5, 0.5);
   const ambientLight = new THREE.AmbientLight(ambientLightColour);
@@ -29,6 +33,26 @@
   boxGeometry2.deleteAttribute('normal');
   boxGeometry2.deleteAttribute('uv');
   boxGeometry2 = THREE.BufferGeometryUtils.mergeVertices(boxGeometry2);
+
+  //let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //let planeTop = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  //const helperLft = new THREE.PlaneHelper(planeLft, 100, 0xffff00);
+  //const helperRgt = new THREE.PlaneHelper(planeRgt, 100, 0xffff00);
+  //const helperBot = new THREE.PlaneHelper(planeBot, 100, 0xffff00);
+  //const helperTop = new THREE.PlaneHelper(planeTop, 100, 0xffff00);
+  //helperLft.layers.set(1);
+  //helperRgt.layers.set(1);
+  //helperBot.layers.set(1);
+  //helperTop.layers.set(1);
+  //scene.add(helperLft);
+  //scene.add(helperRgt);
+  //scene.add(helperTop);
+  //scene.add(helperBot);
+
 
   const vertices = boxGeometry.getAttribute('position');
   const vertices2 = boxGeometry2.getAttribute('position');
@@ -51,47 +75,49 @@
   } else {
     let radius = 1;
     let spacing = radius * 1.5;
-    let count = 5;
-    let offset = count / 2;
+    let count = 25;
+    let offset = count * 1.5 / 2;
     for (let i = 0; i < count; i++) {
       for (let j = 0; j < count; j++) {
-        const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
-        const cube = new THREE.Mesh(boxGeometry, material);
-        cube.position.set(offset - i * spacing, offset - j * spacing, 0);
-        holdall.add(cube);
-        models.push(cube);
+        for (var k = 0; k < count; k++) {
+          const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+          const cube = new THREE.Mesh(boxGeometry, material);
+          cube.position.set(-offset + i * spacing, offset - j * spacing, -k * spacing);
+          holdall.add(cube);
+          models.push(cube);
+        }
       }
     }
 
-    radius *= 2;
-    spacing = radius * 1.5;
-    offset *= 2;
-    for (let i = 0; i < count; i++) {
-      for (let j = 0; j < count; j++) {
-        const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
-        const cube = new THREE.Mesh(boxGeometry, material);
-        cube.position.set(offset - i * spacing, offset - j * spacing, -spacing);
-        cube.scale.set(2, 2, 2);
-        holdall.add(cube);
-        models.push(cube);
-      }
-    }
+    //  radius *= 2;
+    //  spacing = radius * 1.5;
+    //  offset *= 2;
+    //  for (let i = 0; i < count; i++) {
+    //    for (let j = 0; j < count; j++) {
+    //      const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+    //      const cube = new THREE.Mesh(boxGeometry, material);
+    //      cube.position.set(offset - i * spacing, offset - j * spacing, -spacing);
+    //      cube.scale.set(2, 2, 2);
+    //      holdall.add(cube);
+    //      models.push(cube);
+    //    }
+    //  }
   }
 
-  function onKeyUp(e) {
-    if (e.keyCode == 37) {
-      holdall.rotation.y -= .01;
-    }
-    if (e.keyCode == 39) {
-      holdall.rotation.y += .01;
-    }
-    if (e.keyCode == 38) {
-      holdall.rotation.x -= .01;
-    }
-    if (e.keyCode == 40) {
-      holdall.rotation.x += .01;
-    }
-  }
+  //function onKeyUp(e) {
+  //  if (e.keyCode == 37) {
+  //    holdall.rotation.y -= .1;
+  //  }
+  //  if (e.keyCode == 39) {
+  //    holdall.rotation.y += .1;
+  //  }
+  //  if (e.keyCode == 38) {
+  //    holdall.rotation.x -= .1;
+  //  }
+  //  if (e.keyCode == 40) {
+  //    holdall.rotation.x += .1;
+  //  }
+  //}
 
   //const sphereGeometry = new THREE.SphereGeometry();
   //for (let i = 0; i < 10; i++) {
@@ -169,13 +195,6 @@
 
 
   function selectArea(pointer0, pointer1) {
-    let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    let planeTop = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-    let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-
     let pointerBL = pointer0.clone();
     let pointerTR = pointer1.clone();
     if (pointer0.x > pointer1.x) {
@@ -272,7 +291,7 @@
       // reject outside
       if (_frustum.intersectsObject(models[i]) === false) continue;
 
-      // if any of the selection frustum corners intersects then can't be wholly inside3
+      // if any of the selection frustum corners intersects then can't be wholly inside
       if (intersectPointerObject(pointerBL, models[i])) {
         continue;
       }
@@ -316,6 +335,12 @@
     // inside frustum? orientation of plane?
     let found = false;
     for (let i = 0; i < models.length; i++) {
+      // quick rejections
+      // bounding sphere is wholly outside selection frustum 
+      if (_frustum.intersectsObject(models[i]) === false) continue;
+
+      // bounding box is wholly outside selection frustum ???
+
       // quick selected
       // centre is inside frustum
       if (_frustum.containsPoint(models[i].position)) {
@@ -346,15 +371,11 @@
         continue;
       }
 
-      // quick rejections
-      // bounding sphere is wholly outside selection frustum 
-      if (_frustum.intersectsObject(models[i]) === false) continue;
-
       const vertices = models[i].geometry.getAttribute('position').clone().applyMatrix4(models[i].matrixWorld);
 
       // any point is inside frustum
       for (let j = 0; j < vertices.array.length; j += 3) {
-        let point = new THREE.Vector3(vertices.array[j], vertices.array[j+1], vertices.array[j+2]);
+        let point = new THREE.Vector3(vertices.array[j], vertices.array[j + 1], vertices.array[j + 2]);
         if (_frustum.containsPoint(point)) {
           models[i].material.color.set(0xff0000);
           j = vertices.array.length;
@@ -432,12 +453,53 @@
 
   animate();
 
+  let radInteract = document.getElementById('Interact');
+  let radSelect = document.getElementById('Select');
+  let chkSelected = document.getElementById('selection');
+  let chkUnselected = document.getElementById('unselection');
+
+  function interactionChanged() {
+    if (radInteract.checked) {
+      controls.enabled = true;
+
+      helper.enabled = false;
+      renderer.domElement.removeEventListener('pointerup', onPointerUp);
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown);
+    } else {
+      controls.enabled = false;
+
+      helper.enabled = true;
+      renderer.domElement.addEventListener('pointerup', onPointerUp);
+      renderer.domElement.addEventListener('pointerdown', onPointerDown);
+    }
+  }
+
+  chkSelected.addEventListener('change', setSelectedVisible);
+  chkUnselected.addEventListener('change', setUnelectedVisible);
+
+
+  function setSelectedVisible() {
+    for (let i = 0; i < models.length; i++) {
+      if (models[i].material.color.getHex() === 0xff0000)
+        models[i].visible = chkSelected.checked;
+    }
+  }
+
+  function setUnelectedVisible() {
+    for (let i = 0; i < models.length; i++) {
+      if (models[i].material.color.getHex() === 0xffffff)
+        models[i].visible = chkUnselected.checked;
+    }
+  }
+
+  radInteract.addEventListener('change', interactionChanged);
+  radSelect.addEventListener('change', interactionChanged);
+
+
 
   window.addEventListener('resize', onWindowResize, false);
-  //renderer.domElement.addEventListener('pointermove', onPointerMove);
   renderer.domElement.addEventListener('pointerup', onPointerUp);
   renderer.domElement.addEventListener('pointerdown', onPointerDown);
-  document.addEventListener('keyup', onKeyUp);
 
   function onWindowResize() {
 
