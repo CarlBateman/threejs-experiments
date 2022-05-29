@@ -7,6 +7,7 @@ class SelectionHelper {
 	//constructor(selectionBox, renderer, cssClassName) {
 	constructor(renderer, cssClassName) {
 
+		this.enabled = true;
 		this.element = document.createElement('div');
 		this.element.classList.add(cssClassName);
 		this.element.style.pointerEvents = 'none';
@@ -58,7 +59,9 @@ class SelectionHelper {
 	}
 
 	onSelectStart(event) {
-
+		if (!this.enabled) {
+			return;
+    }
 		this.renderer.domElement.parentElement.appendChild(this.element);
 
 		this.element.style.left = event.clientX + 'px';
@@ -72,6 +75,9 @@ class SelectionHelper {
 	}
 
 	onSelectMove(event) {
+		if (!this.enabled) {
+			return;
+		}
 
 		this.pointBottomRight.x = Math.max(this.startPoint.x, event.clientX);
 		this.pointBottomRight.y = Math.max(this.startPoint.y, event.clientY);
@@ -86,6 +92,9 @@ class SelectionHelper {
 	}
 
 	onSelectOver() {
+		if (!this.enabled) {
+			return;
+		}
 
 		this.element.parentElement.removeChild(this.element);
 
