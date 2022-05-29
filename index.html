@@ -13,19 +13,120 @@
       background-color: rgba(75, 160, 255, 0.3);
       position: fixed;
     }
+
+    #control_options {
+      position: absolute;
+      top: 0px;
+      width: 300px;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: left;
+      right: 0;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /*pointer-events: none;*/
+      z-index: 1; /* TODO Solve this in HTML */
+      background-color: rgba(255, 255, 255, 0.75);
+      border-radius: 5px;
+      border-style: groove;
+    }
+
+    #info {
+      position: absolute;
+      color: #fff;
+      top: 0px;
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1; /* TODO Solve this in HTML */
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
     /*    canvas#webgl {
       position: absolute;
       width: 50%;
       left: 25%;
     }*/
+
+    input[type=radio] {
+      vertical-align: middle;
+      float: right;
+    }
+
+    input[type=checkbox] {
+      vertical-align: middle;
+      float: right;
+    }
+
+    label.for-radio {
+      display: block;
+      overflow: hidden;
+      width: 100px;
+    }
+
+    label.for-check {
+      display: block;
+      overflow: hidden;
+      width: 200px;
+    }
   </style>
   <script src="js/index.js"></script>
   <script src="lib/three.js"></script>
   <script src="lib/BufferGeometryUtils.js"></script>
+  <script src="lib/OrbitControls.js"></script>
 
   <script src="js/SelectionHelper.js"></script>
 
 </head>
 <body>
+  <!--<div id="info">
+  </div>-->
+  <div id="control_options">
+    <label for="Select" class="for-radio">
+      Select
+      <input type="radio" id="Select" name="action" value="Select" checked="checked">
+    </label>
+    <label for="Interact" class="for-radio">
+      Interact
+      <input type="radio" id="Interact" name="action" value="Interact">
+    </label>
+
+    <hr />
+
+    <label for="frustum" class="for-check">
+      Show selection frustum
+      <input type="checkbox" id="frustum" name="frustum" value="frustum">
+    </label>
+
+    <label for="ray" class="for-check">
+      Show selection ray
+      <input type="checkbox" id="ray" name="ray" value="ray">
+    </label>
+
+    <label for="selection" class="for-check">
+      Show selected items
+      <input type="checkbox" id="selection" name="selection" value="selection" checked="checked">
+    </label>
+
+    <label for="unselection" class="for-check">
+      Show unselected items
+      <input type="checkbox" id="unselection" name="unselection" value="unselection" checked="checked">
+    </label>
+
+    <hr />
+    In selection mode -<br /><br />
+    Click selects with ray<br /><br />
+    Click-drag left selects anything partially inside or intersecting selection frustum<br /><br />
+    Click-drag right selects anything completely inside selection frustum
+
+  </div>
 </body>
 </html>
