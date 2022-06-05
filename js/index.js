@@ -26,40 +26,128 @@
   scene.add(light);
 
   const holdall = new THREE.Object3D();
+  holdall.position.x = 10;
+  holdall.rotation.x = 1;
   scene.add(holdall);
 
-  const boxGeometry = new THREE.BoxGeometry();
-  let boxGeometry2 = new THREE.BoxGeometry();
-  boxGeometry2.deleteAttribute('normal');
-  boxGeometry2.deleteAttribute('uv');
-  boxGeometry2 = THREE.BufferGeometryUtils.mergeVertices(boxGeometry2);
 
-  //let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //let planeTop = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
-  //const helperLft = new THREE.PlaneHelper(planeLft, 100, 0xffff00);
-  //const helperRgt = new THREE.PlaneHelper(planeRgt, 100, 0xffff00);
-  //const helperBot = new THREE.PlaneHelper(planeBot, 100, 0xffff00);
-  //const helperTop = new THREE.PlaneHelper(planeTop, 100, 0xffff00);
-  //helperLft.layers.set(1);
-  //helperRgt.layers.set(1);
-  //helperBot.layers.set(1);
-  //helperTop.layers.set(1);
-  //scene.add(helperLft);
-  //scene.add(helperRgt);
-  //scene.add(helperTop);
-  //scene.add(helperBot);
+  const frustumHelperGeometry = new THREE.BoxGeometry();
 
 
-  const vertices = boxGeometry.getAttribute('position');
-  const vertices2 = boxGeometry2.getAttribute('position');
+  const material1 = new THREE.MeshBasicMaterial({ color: 0xffdddd/*, wireframe: true*/, transparent: true/*, vertexColors: true*/ });
+  material1.opacity = 0.5;
 
-  const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+  //const positionAttribute = frustumHelperGeometry.getAttribute('position');
+  //const colors = [];
+  //const color = new THREE.Color();
+
+  //for (let i = 0; i < positionAttribute.count; i += 3) {
+  //  color.set(Math.random() * 0xffffff);
+
+  //  // define the same color for each vertex of a triangle
+  //  colors.push(color.r, color.g, color.b);
+  //  colors.push(color.r, color.g, color.b);
+  //  colors.push(color.r, color.g, color.b);
+  //}
+
+  const frustumHelper = new THREE.Mesh(frustumHelperGeometry, material1);
+  for (var i = 0; i < frustumHelperGeometry.attributes.position.array.length; i++) {
+    frustumHelperGeometry.attributes.position.array[i] *= 2.0;
+
+  }
+
+  // define the new attribute
+  //frustumHelper.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+  //frustumHelper.geometry.deleteAttribute('normal');
+  //frustumHelper.geometry.deleteAttribute('uv');
+
+  scene.add(frustumHelper);
+
+  const edges = new THREE.EdgesGeometry(frustumHelperGeometry);
+  //debugger;
+  edges.attributes.position.array[0] = -1.0;
+  const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+
+  //line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumHelperGeometry.getAttribute('position'), 3));
+  scene.add(line);
+
+  //console.log(frustumHelperGeometry.getAttribute('position').array);
+  console.log(edges.getAttribute('position').array);
+
+  //let pointsOfFrustum = [];
+  //pointsOfFrustum.push(...[0, 0, 0]);
+  //pointsOfFrustum.push(...[0, 10, 0]);
+  //pointsOfFrustum.push(...[10, 0, 0]);
+  //pointsOfFrustum.push(...[0, 0, 0]);
+  //let ptsFloat32Array = Float32Array.from(pointsOfFrustum);
+  //let bufferAttribute = new THREE.BufferAttribute(ptsFloat32Array, 3);
+
+  //let pointsOfIntersectionBufferGeometry = new THREE.BufferGeometry();
+  //pointsOfIntersectionBufferGeometry.setAttribute('position', bufferAttribute);
+  //var pointsMaterial = new THREE.PointsMaterial({
+  //  size: 1,
+  //  color: 0xffff00
+  //});
+  //var points = new THREE.Points(pointsOfIntersectionBufferGeometry, pointsMaterial);
+  //scene.add(points);
+
+  //var lines = new THREE.LineSegments(pointsOfIntersectionBufferGeometry, new THREE.LineBasicMaterial({
+  //  color: 0xffffff
+  //}));
+  //scene.add(lines);
+
+
+
+
+  //let boxGeometry3 = new THREE.BoxGeometry();
+  ////boxGeometry3.deleteAttribute('normal');
+  ////boxGeometry3.deleteAttribute('uv');
+  //boxGeometry3 = THREE.BufferGeometryUtils.mergeVertices(boxGeometry3);
+
+  //let boxVertices = boxGeometry3.getAttribute('position');
+  //debugger;
+  //const material = new THREE.MeshBasicMaterial({
+  //  color: "lightgray",
+  //  transparent: true,
+  //  opacity: 0.75,
+  //  side: THREE.DoubleSide });
+  //let planeGeom = new THREE.PlaneGeometry(30, 30);
+  //const vertices = planeGeom.getAttribute('position');
+  //var plane = new THREE.Mesh(planeGeom, material);
+  //plane.position.y = -3.14;
+  //plane.rotation.x = Math.PI / 5;
+  //scene.add(plane);
+
+  // Trapezoid to match side of frustum, four point, four lines, one triangle
+  //let ptsFloat32Array = Float32Array.from(pointsOfIntersection);
+  //let bufferAttribute = new THREE.BufferAttribute(ptsFloat32Array, 3);
+  //pointsOfIntersectionBufferGeometry.setAttribute('position', bufferAttribute);
+
+  //var pointsMaterial = new THREE.PointsMaterial({
+  //  size: 1,
+  //  color: 0xffff00
+  //});
+  //var points = new THREE.Points(pointsOfIntersectionBufferGeometry, pointsMaterial);
+  //scene.add(points);
+
+  //var lines = new THREE.LineSegments(pointsOfIntersectionBufferGeometry, new THREE.LineBasicMaterial({
+  //  color: 0xffffff
+  //}));
+  //scene.add(lines);
+  let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  let planeTop = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+  let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+
+
+
 
   let models = [];
+  const boxGeometry = new THREE.BoxGeometry();
+
   if (false) {
     for (let i = 0; i < 10; i++) {
       const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
@@ -75,12 +163,12 @@
   } else {
     let radius = 1;
     let spacing = radius * 1.5;
-    let count = 25;
+    let count = 10;
     let offset = count * 1.5 / 2;
     for (let i = 0; i < count; i++) {
       for (let j = 0; j < count; j++) {
         for (var k = 0; k < count; k++) {
-          const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
+          const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
           const cube = new THREE.Mesh(boxGeometry, material);
           cube.position.set(-offset + i * spacing, offset - j * spacing, -k * spacing);
           holdall.add(cube);
@@ -118,6 +206,15 @@
   //    holdall.rotation.x += .1;
   //  }
   //}
+
+  //const sphereGeometry = new THREE.SphereGeometry(.1);
+  //const spheres = [];
+  //for (var i = 0; i < 4; i++) {
+  //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+  //  spheres[i] = new THREE.Mesh(sphereGeometry, material);
+  //  scene.add(spheres[i]);
+  //}
+
 
   //const sphereGeometry = new THREE.SphereGeometry();
   //for (let i = 0; i < 10; i++) {
@@ -197,6 +294,9 @@
   function selectArea(pointer0, pointer1) {
     let pointerBL = pointer0.clone();
     let pointerTR = pointer1.clone();
+
+    let pointerTL = pointer0.clone();
+    let pointerBR = pointer1.clone();
     if (pointer0.x > pointer1.x) {
       pointerBL.x = pointer1.x;
       pointerTR.x = pointer0.x;
@@ -205,6 +305,16 @@
       pointerBL.y = pointer1.y;
       pointerTR.y = pointer0.y;
     }
+
+    pointerTL.x = pointerBL.x;
+    pointerTL.y = pointerTR.y;
+
+    pointerBR.x = pointerTR.x;
+    pointerBR.y = pointerBL.y;
+
+
+
+
 
     // we need to calculate the camera right vector
     let cameraRightVector = new THREE.Vector3();
@@ -234,18 +344,129 @@
     //let up = camera.position.clone().add(camera.up);
     planeNear.setFromCoplanarPoints(v1, v3, v2);
 
-    const raycasterBL = new THREE.Raycaster();
-    raycasterBL.setFromCamera(pointerBL, camera);
-
-    const intersectsBL1 = new THREE.Vector3();
-    raycasterBL.ray.intersectPlane(planeFar, intersectsBL1);
 
 
-    const raycasterTR = new THREE.Raycaster();
-    raycasterTR.setFromCamera(pointerTR, camera);
+    let planeFar1 = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
+    let planeNear1 = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
 
-    const intersectsTR1 = new THREE.Vector3();
-    raycasterTR.ray.intersectPlane(planeFar, intersectsTR1);
+    vToPlane = fwd.multiplyScalar(camera.far - 10.);
+
+    v1 = camera.position.clone().add(vToPlane);
+    v2 = v1.clone().add(cameraRightVector);
+    v3 = v1.clone().add(camera.up);
+
+    planeFar1.setFromCoplanarPoints(v1, v2, v3);
+
+    // near plane
+    camera.getWorldDirection(fwd);
+    vToPlane = fwd.multiplyScalar(camera.near + 10.);
+
+    v1 = camera.position.clone().add(vToPlane);
+    v2 = v1.clone().add(cameraRightVector);
+    v3 = v1.clone().add(camera.up);
+
+    //let up = camera.position.clone().add(camera.up);
+    planeNear1.setFromCoplanarPoints(v1, v3, v2);
+
+
+    const intersectsBL1 = getPointOnPlane(pointerBL, planeFar1);
+    const intersectsTR1 = getPointOnPlane(pointerTR, planeFar1);
+
+    const intersectsBR1 = getPointOnPlane(pointerBR, planeFar1);
+    const intersectsTL1 = getPointOnPlane(pointerTL, planeFar1);
+
+    const intersectsBL2 = getPointOnPlane(pointerBL, planeNear1);
+    const intersectsTR2 = getPointOnPlane(pointerTR, planeNear1);
+
+    const intersectsBR2 = getPointOnPlane(pointerBR, planeNear1);
+    const intersectsTL2 = getPointOnPlane(pointerTL, planeNear1);
+
+    const frustumVertices = [];
+    frustumVertices.push(...intersectsTR2);
+    frustumVertices.push(...intersectsTR1);
+    frustumVertices.push(...intersectsBR2);
+
+    frustumVertices.push(...intersectsBR1);
+    frustumVertices.push(...intersectsTL1);
+    frustumVertices.push(...intersectsTL2);
+
+    frustumVertices.push(...intersectsBL1);
+    frustumVertices.push(...intersectsBL2);
+    frustumVertices.push(...intersectsTL1);
+
+    frustumVertices.push(...intersectsTR1);
+    frustumVertices.push(...intersectsTL2);
+    frustumVertices.push(...intersectsTR2);
+
+
+    frustumVertices.push(...intersectsBL2);
+    frustumVertices.push(...intersectsBR2);
+    frustumVertices.push(...intersectsBL1);
+
+    frustumVertices.push(...intersectsBR1);
+    frustumVertices.push(...intersectsTL2);
+    frustumVertices.push(...intersectsTR2);
+
+    frustumVertices.push(...intersectsBL2);
+    frustumVertices.push(...intersectsBR2);
+    frustumVertices.push(...intersectsTR2);
+
+    frustumVertices.push(...intersectsTL1);
+    frustumVertices.push(...intersectsBR1);
+    frustumVertices.push(...intersectsBL1);
+
+    frustumHelper.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumVertices, 3));
+    //console.log(frustumHelper.geometry.getAttribute('position').array);
+    frustumHelper.geometry.computeVertexNormals();
+
+    const edgeVertices = [];
+    edgeVertices.push(...intersectsTL1);
+    edgeVertices.push(...intersectsTR1);
+
+    edgeVertices.push(...intersectsTR1);
+    edgeVertices.push(...intersectsBR1);
+
+    edgeVertices.push(...intersectsBR1);
+    edgeVertices.push(...intersectsBL1);
+
+    edgeVertices.push(...intersectsBL1);
+    edgeVertices.push(...intersectsTL1);
+
+
+    edgeVertices.push(...intersectsTL2);
+    edgeVertices.push(...intersectsTR2);
+
+    edgeVertices.push(...intersectsTR2);
+    edgeVertices.push(...intersectsBR2);
+
+    edgeVertices.push(...intersectsBR2);
+    edgeVertices.push(...intersectsBL2);
+
+    edgeVertices.push(...intersectsBL2);
+    edgeVertices.push(...intersectsTL2);
+
+
+    edgeVertices.push(...intersectsTL1);
+    edgeVertices.push(...intersectsTL2);
+
+    edgeVertices.push(...intersectsTR1);
+    edgeVertices.push(...intersectsTR2);
+
+    edgeVertices.push(...intersectsBR1);
+    edgeVertices.push(...intersectsBL2);
+
+    edgeVertices.push(...intersectsBL1);
+    edgeVertices.push(...intersectsBL2);
+
+
+    line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(edgeVertices, 3));
+
+    //const edges1 = new THREE.EdgesGeometry(frustumHelper.geometry);
+    //const line1 = new THREE.LineSegments(edges1, new THREE.LineBasicMaterial({ color: 0xffffff }));
+    //scene.add(line1);
+    //line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumVertices, 3));
+    //console.log(frustumHelperGeometry.getAttribute('position').array);
+    //console.log(line.geometry.getAttribute('position').array);
 
     // left plane
     // formed from camera position, bottom left intersection point and camera up vector
@@ -274,6 +495,8 @@
     planes[3] = planeLft;
     planes[4] = planeNear;
     planes[5] = planeFar;
+
+
 
     // if left to right enclosed
     // if right to left any partially selected
@@ -322,7 +545,6 @@
         models[i].material.color.set(0xff0000);
       }
     }
-
   }
 
   function intersectPointerObject(pointer, object) {
@@ -508,5 +730,15 @@
 
     renderer.setSize(window.innerWidth, window.innerHeight);
 
+  }
+
+  function getPointOnPlane(pointer, plane) {
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(pointer, camera);
+
+    const intersects = new THREE.Vector3();
+    raycaster.ray.intersectPlane(plane, intersects);
+
+    return intersects;
   }
 });
