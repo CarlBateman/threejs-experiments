@@ -51,26 +51,16 @@
   //}
 
   const frustumHelper = new THREE.Mesh(frustumHelperGeometry, material1);
-  for (var i = 0; i < frustumHelperGeometry.attributes.position.array.length; i++) {
-    frustumHelperGeometry.attributes.position.array[i] *= 2.0;
-
-  }
-
-  // define the new attribute
-  //frustumHelper.geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-  //frustumHelper.geometry.deleteAttribute('normal');
-  //frustumHelper.geometry.deleteAttribute('uv');
-
   scene.add(frustumHelper);
 
   const edges = new THREE.EdgesGeometry(frustumHelperGeometry);
-  //debugger;
-  edges.attributes.position.array[0] = -1.0;
   const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
-
-  //line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumHelperGeometry.getAttribute('position'), 3));
   scene.add(line);
+
+  const cornerGeometry = new THREE.BufferGeometry();
+  const cornerMaterial = new THREE.PointsMaterial({ color: 0x888888 });
+  const cornerPoints = new THREE.Points(cornerGeometry, cornerMaterial);
+  scene.add(cornerPoints);
 
   //console.log(frustumHelperGeometry.getAttribute('position').array);
   console.log(edges.getAttribute('position').array);
@@ -453,13 +443,16 @@
     edgeVertices.push(...intersectsTR2);
 
     edgeVertices.push(...intersectsBR1);
-    edgeVertices.push(...intersectsBL2);
+    edgeVertices.push(...intersectsBR2);
 
     edgeVertices.push(...intersectsBL1);
     edgeVertices.push(...intersectsBL2);
 
-
     line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(edgeVertices, 3));
+
+    let corners = [...intersectsTL1, ...intersectsTR1, ...intersectsBL1, ...intersectsBR1,
+      ...intersectsTL2, ...intersectsTR2, ...intersectsBL2, ...intersectsBR2];
+    cornerPoints.geometry.setAttribute('position', new THREE.Float32BufferAttribute(corners, 3));
 
     //const edges1 = new THREE.EdgesGeometry(frustumHelper.geometry);
     //const line1 = new THREE.LineSegments(edges1, new THREE.LineBasicMaterial({ color: 0xffffff }));
