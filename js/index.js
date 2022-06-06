@@ -34,19 +34,6 @@
   const material1 = new THREE.MeshBasicMaterial({ color: 0xffdddd/*, side: THREE.DoubleSide*//*, wireframe: true*/, transparent: true/*, vertexColors: true*/ });
   material1.opacity = 0.5;
 
-  //const positionAttribute = frustumHelperGeometry.getAttribute('position');
-  //const colors = [];
-  //const color = new THREE.Color();
-
-  //for (let i = 0; i < positionAttribute.count; i += 3) {
-  //  color.set(Math.random() * 0xffffff);
-
-  //  // define the same color for each vertex of a triangle
-  //  colors.push(color.r, color.g, color.b);
-  //  colors.push(color.r, color.g, color.b);
-  //  colors.push(color.r, color.g, color.b);
-  //}
-
   const frustumHelper = new THREE.Mesh(frustumHelperGeometry, material1);
 
   frustumHolder.add(frustumHelper);
@@ -56,70 +43,6 @@
   frustumHolder.add(line);
   frustumHolder.visible = false;
 
-
-  //console.log(frustumHelperGeometry.getAttribute('position').array);
-  //console.log(edges.getAttribute('position').array);
-
-  //let pointsOfFrustum = [];
-  //pointsOfFrustum.push(...[0, 0, 0]);
-  //pointsOfFrustum.push(...[0, 10, 0]);
-  //pointsOfFrustum.push(...[10, 0, 0]);
-  //pointsOfFrustum.push(...[0, 0, 0]);
-  //let ptsFloat32Array = Float32Array.from(pointsOfFrustum);
-  //let bufferAttribute = new THREE.BufferAttribute(ptsFloat32Array, 3);
-
-  //let pointsOfIntersectionBufferGeometry = new THREE.BufferGeometry();
-  //pointsOfIntersectionBufferGeometry.setAttribute('position', bufferAttribute);
-  //var pointsMaterial = new THREE.PointsMaterial({
-  //  size: 1,
-  //  color: 0xffff00
-  //});
-  //var points = new THREE.Points(pointsOfIntersectionBufferGeometry, pointsMaterial);
-  //scene.add(points);
-
-  //var lines = new THREE.LineSegments(pointsOfIntersectionBufferGeometry, new THREE.LineBasicMaterial({
-  //  color: 0xffffff
-  //}));
-  //scene.add(lines);
-
-
-
-
-  //let boxGeometry3 = new THREE.BoxGeometry();
-  ////boxGeometry3.deleteAttribute('normal');
-  ////boxGeometry3.deleteAttribute('uv');
-  //boxGeometry3 = THREE.BufferGeometryUtils.mergeVertices(boxGeometry3);
-
-  //let boxVertices = boxGeometry3.getAttribute('position');
-  //debugger;
-  //const material = new THREE.MeshBasicMaterial({
-  //  color: "lightgray",
-  //  transparent: true,
-  //  opacity: 0.75,
-  //  side: THREE.DoubleSide });
-  //let planeGeom = new THREE.PlaneGeometry(30, 30);
-  //const vertices = planeGeom.getAttribute('position');
-  //var plane = new THREE.Mesh(planeGeom, material);
-  //plane.position.y = -3.14;
-  //plane.rotation.x = Math.PI / 5;
-  //scene.add(plane);
-
-  // Trapezoid to match side of frustum, four point, four lines, one triangle
-  //let ptsFloat32Array = Float32Array.from(pointsOfIntersection);
-  //let bufferAttribute = new THREE.BufferAttribute(ptsFloat32Array, 3);
-  //pointsOfIntersectionBufferGeometry.setAttribute('position', bufferAttribute);
-
-  //var pointsMaterial = new THREE.PointsMaterial({
-  //  size: 1,
-  //  color: 0xffff00
-  //});
-  //var points = new THREE.Points(pointsOfIntersectionBufferGeometry, pointsMaterial);
-  //scene.add(points);
-
-  //var lines = new THREE.LineSegments(pointsOfIntersectionBufferGeometry, new THREE.LineBasicMaterial({
-  //  color: 0xffffff
-  //}));
-  //scene.add(lines);
   let planeLft = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
   let planeRgt = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
   let planeBot = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
@@ -127,10 +50,8 @@
   let planeFar = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
   let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
 
-
   let models = [];
   const boxGeometry = new THREE.BoxGeometry();
-
 
   // regular space cubes
   // regular space shapes
@@ -164,60 +85,6 @@
       }
     }
   }
-
-  //function onKeyUp(e) {
-  //  if (e.keyCode == 37) {
-  //    holdall.rotation.y -= .1;
-  //  }
-  //  if (e.keyCode == 39) {
-  //    holdall.rotation.y += .1;
-  //  }
-  //  if (e.keyCode == 38) {
-  //    holdall.rotation.x -= .1;
-  //  }
-  //  if (e.keyCode == 40) {
-  //    holdall.rotation.x += .1;
-  //  }
-  //}
-
-  //const sphereGeometry = new THREE.SphereGeometry(.1);
-  //const spheres = [];
-  //for (var i = 0; i < 4; i++) {
-  //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-  //  spheres[i] = new THREE.Mesh(sphereGeometry, material);
-  //  scene.add(spheres[i]);
-  //}
-
-
-  //const sphereGeometry = new THREE.SphereGeometry();
-  //for (let i = 0; i < 10; i++) {
-  //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-  //  const cube = new THREE.Mesh(sphereGeometry, material);
-  //  //cube.name = i;
-
-  //  cube.position.set(-5 + Math.random() * 15, -5 + Math.random() * 15, -5 + Math.random() * 5);
-  //  cube.rotation.set(-5 + Math.random() * 10, -5 + Math.random() * 10, -5 + Math.random() * 10);
-  //  scene.add(cube);
-  //  models.push(cube);
-
-  //  //const box = new THREE.BoxHelper(cube, 0xffff00);
-  //  //scene.add(box);
-  //}
-
-  //const cylinderGeometry = new THREE.CylinderGeometry();
-  //for (let i = 0; i < 10; i++) {
-  //  const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
-  //  const cube = new THREE.Mesh(cylinderGeometry, material);
-  //  //cube.name = i;
-
-  //  cube.position.set(-5 + Math.random() * 15, -5 + Math.random() * 15, -5 + Math.random() * 5);
-  //  cube.rotation.set(-5 + Math.random() * 10, -5 + Math.random() * 10, -5 + Math.random() * 10);
-  //  scene.add(cube);
-  //  models.push(cube);
-
-  //  //const box = new THREE.BoxHelper(cube, 0xffff00);
-  //  //scene.add(box);
-  //}
 
   const _frustum = new THREE.Frustum();
 
@@ -284,9 +151,6 @@
 
     pointerBR.x = pointerTR.x;
     pointerBR.y = pointerBL.y;
-
-
-
 
 
     // we need to calculate the camera right vector
@@ -629,19 +493,12 @@
   }
 
 
-  let angle = 0;
   function animate() {
-    //camera.position.x += .01;
-    //models[0].rotation.x += .01;
-    //angle += .01;
-    //sphere.position.z = Math.cos(angle) * 10;
-    //sphere.position.x = Math.sin(angle) * 10;
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
   };
 
   animate();
-
 
   function onKeyUp(e) {
     if (e.keyCode == 17) {
