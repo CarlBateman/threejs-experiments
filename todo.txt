@@ -2,10 +2,14 @@
 "simple" editor
 
 NOW/NEXT
-set and restore colours
+Tidy code
+Restyle controls (nicer style???)
+Switch between "select" and "move" with ctrl?
+save and restore colours
+show/hide selection ray
+randomise objects?
 
-find Intersected Objects
-check other object vertices
+
 
 
 INTERMEDIATE
@@ -81,3 +85,16 @@ backdrop -> invisible, billboard, child of camera
 	layer?
 	intersect with invisible?
 	draw selection area
+
+
+Switch between "select" and "move"
+	Orbit control
+show/hide selection frustum
+show/hide selected/unselected
+
+set and restore colours
+
+find Intersected Objects
+check other object vertices
+
+
