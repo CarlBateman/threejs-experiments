@@ -9,9 +9,8 @@
   camera.position.z = 30;
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enabled = false;
   const helper = new SelectionHelper(renderer, 'selectBox');
-  helper.enabled = true;
+  helper.enabled = false;
 
   let ambientLightColour = new THREE.Color(0.5, 0.5, 0.5);
   const ambientLight = new THREE.AmbientLight(ambientLightColour);
@@ -132,6 +131,10 @@
   let models = [];
   const boxGeometry = new THREE.BoxGeometry();
 
+
+  // regular space cubes
+  // regular space shapes
+  // randomised cubes
   if (false) {
     for (let i = 0; i < 10; i++) {
       const material = new THREE.MeshPhongMaterial({ color: 0xffffff, wireframe: true });
@@ -160,20 +163,6 @@
         }
       }
     }
-
-    //  radius *= 2;
-    //  spacing = radius * 1.5;
-    //  offset *= 2;
-    //  for (let i = 0; i < count; i++) {
-    //    for (let j = 0; j < count; j++) {
-    //      const material = new THREE.MeshPhongMaterial({ color: 0xffffff/*, wireframe: true*/ });
-    //      const cube = new THREE.Mesh(boxGeometry, material);
-    //      cube.position.set(offset - i * spacing, offset - j * spacing, -spacing);
-    //      cube.scale.set(2, 2, 2);
-    //      holdall.add(cube);
-    //      models.push(cube);
-    //    }
-    //  }
   }
 
   //function onKeyUp(e) {
@@ -653,19 +642,18 @@
 
   animate();
 
-  let radInteract = document.getElementById('Interact');
-  let radSelect = document.getElementById('Select');
-  let chkSelected = document.getElementById('selection');
-  let chkUnselected = document.getElementById('unselection');
 
-  function interactionChanged() {
-    if (radInteract.checked) {
+  function onKeyUp(e) {
+    if (e.keyCode == 17) {
       controls.enabled = true;
 
       helper.enabled = false;
       renderer.domElement.removeEventListener('pointerup', onPointerUp);
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
-    } else {
+    }
+  }
+  function onKeyDown(e) {
+    if (e.keyCode == 17) {
       controls.enabled = false;
 
       helper.enabled = true;
@@ -673,6 +661,13 @@
       renderer.domElement.addEventListener('pointerdown', onPointerDown);
     }
   }
+
+  document.addEventListener('keyup', onKeyUp);
+  document.addEventListener('keydown', onKeyDown);
+
+
+  let chkSelected = document.getElementById('selection');
+  let chkUnselected = document.getElementById('unselection');
 
   chkSelected.addEventListener('change', setSelectedVisible);
   chkUnselected.addEventListener('change', setUnelectedVisible);
@@ -692,8 +687,6 @@
     }
   }
 
-  radInteract.addEventListener('change', interactionChanged);
-  radInteract.addEventListener('change', interactionChanged);
 
   let chkFrustum = document.getElementById('frustum');
   chkFrustum.addEventListener('change', setFrustumHolderVisible);
@@ -701,11 +694,7 @@
     frustumHolder.visible = chkFrustum.checked;
   }
 
-
-
   window.addEventListener('resize', onWindowResize, false);
-  renderer.domElement.addEventListener('pointerup', onPointerUp);
-  renderer.domElement.addEventListener('pointerdown', onPointerDown);
 
   function onWindowResize() {
 

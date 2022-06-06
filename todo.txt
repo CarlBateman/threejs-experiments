@@ -4,10 +4,13 @@
 NOW/NEXT
 Tidy code
 Restyle controls (nicer style???)
-Switch between "select" and "move" with ctrl?
 save and restore colours
 show/hide selection ray
 randomise objects?
+	regular space cubes
+	regular space shapes
+	randomised cubes
+
 
 
 
@@ -97,4 +100,5 @@ set and restore colours
 find Intersected Objects
 check other object vertices
 
+Switch between "select" and "move" with ctrl
 
