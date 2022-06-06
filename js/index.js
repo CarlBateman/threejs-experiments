@@ -24,14 +24,14 @@
   scene.add(light);
 
   const holdall = new THREE.Object3D();
-  holdall.position.x = 10;
-  holdall.rotation.x = 1;
+  //holdall.position.x = 10;
+  //holdall.rotation.x = 1;
   scene.add(holdall);
 
+  const frustumHolder = new THREE.Object3D();
+  scene.add(frustumHolder);
 
   const frustumHelperGeometry = new THREE.BoxGeometry();
-
-
   const material1 = new THREE.MeshBasicMaterial({ color: 0xffdddd/*, side: THREE.DoubleSide*//*, wireframe: true*/, transparent: true/*, vertexColors: true*/ });
   material1.opacity = 0.5;
 
@@ -50,11 +50,12 @@
 
   const frustumHelper = new THREE.Mesh(frustumHelperGeometry, material1);
 
-  scene.add(frustumHelper);
+  frustumHolder.add(frustumHelper);
 
   const edges = new THREE.EdgesGeometry(frustumHelperGeometry);
   const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
-  scene.add(line);
+  frustumHolder.add(line);
+  frustumHolder.visible = false;
 
 
   //console.log(frustumHelperGeometry.getAttribute('position').array);
@@ -128,8 +129,6 @@
   let planeNear = new THREE.Plane(new THREE.Vector3(1, 0, 0), -11);
 
 
-
-
   let models = [];
   const boxGeometry = new THREE.BoxGeometry();
 
@@ -148,7 +147,7 @@
   } else {
     let radius = 1;
     let spacing = radius * 1.5;
-    let count = 10;
+    let count = 20;
     let offset = count * 1.5 / 2;
     for (let i = 0; i < count; i++) {
       for (let j = 0; j < count; j++) {
@@ -694,7 +693,13 @@
   }
 
   radInteract.addEventListener('change', interactionChanged);
-  radSelect.addEventListener('change', interactionChanged);
+  radInteract.addEventListener('change', interactionChanged);
+
+  let chkFrustum = document.getElementById('frustum');
+  chkFrustum.addEventListener('change', setFrustumHolderVisible);
+  function setFrustumHolderVisible() {
+    frustumHolder.visible = chkFrustum.checked;
+  }
 
 
 
