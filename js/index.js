@@ -7,8 +7,6 @@
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 30;
-  camera.lookAt(0, 0, 0);
-  camera.layers.enable(1);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enabled = false;
@@ -34,7 +32,7 @@
   const frustumHelperGeometry = new THREE.BoxGeometry();
 
 
-  const material1 = new THREE.MeshBasicMaterial({ color: 0xffdddd/*, wireframe: true*/, transparent: true/*, vertexColors: true*/ });
+  const material1 = new THREE.MeshBasicMaterial({ color: 0xffdddd/*, side: THREE.DoubleSide*//*, wireframe: true*/, transparent: true/*, vertexColors: true*/ });
   material1.opacity = 0.5;
 
   //const positionAttribute = frustumHelperGeometry.getAttribute('position');
@@ -51,19 +49,16 @@
   //}
 
   const frustumHelper = new THREE.Mesh(frustumHelperGeometry, material1);
+
   scene.add(frustumHelper);
 
   const edges = new THREE.EdgesGeometry(frustumHelperGeometry);
   const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
   scene.add(line);
 
-  const cornerGeometry = new THREE.BufferGeometry();
-  const cornerMaterial = new THREE.PointsMaterial({ color: 0x888888 });
-  const cornerPoints = new THREE.Points(cornerGeometry, cornerMaterial);
-  scene.add(cornerPoints);
 
   //console.log(frustumHelperGeometry.getAttribute('position').array);
-  console.log(edges.getAttribute('position').array);
+  //console.log(edges.getAttribute('position').array);
 
   //let pointsOfFrustum = [];
   //pointsOfFrustum.push(...[0, 0, 0]);
@@ -399,14 +394,14 @@
 
     frustumVertices.push(...intersectsBL2);
     frustumVertices.push(...intersectsBR2);
-    frustumVertices.push(...intersectsTR2);
+    frustumVertices.push(...intersectsTR1);
 
     frustumVertices.push(...intersectsTL1);
     frustumVertices.push(...intersectsBR1);
     frustumVertices.push(...intersectsBL1);
 
     frustumHelper.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumVertices, 3));
-    //console.log(frustumHelper.geometry.getAttribute('position').array);
+
     frustumHelper.geometry.computeVertexNormals();
 
     const edgeVertices = [];
@@ -450,16 +445,7 @@
 
     line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(edgeVertices, 3));
 
-    let corners = [...intersectsTL1, ...intersectsTR1, ...intersectsBL1, ...intersectsBR1,
-      ...intersectsTL2, ...intersectsTR2, ...intersectsBL2, ...intersectsBR2];
-    cornerPoints.geometry.setAttribute('position', new THREE.Float32BufferAttribute(corners, 3));
 
-    //const edges1 = new THREE.EdgesGeometry(frustumHelper.geometry);
-    //const line1 = new THREE.LineSegments(edges1, new THREE.LineBasicMaterial({ color: 0xffffff }));
-    //scene.add(line1);
-    //line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(frustumVertices, 3));
-    //console.log(frustumHelperGeometry.getAttribute('position').array);
-    //console.log(line.geometry.getAttribute('position').array);
 
     // left plane
     // formed from camera position, bottom left intersection point and camera up vector
