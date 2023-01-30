@@ -2,9 +2,15 @@
 "simple" editor
 
 NOW/NEXT
+Start again what fun
 Tidy code
+show/hide selection volume
+Select intersection
+Select enclosed
+
+
+
 Restyle controls (nicer style???)
-save and restore colours
 show/hide selection ray
 randomise objects?
 	regular space cubes
@@ -61,9 +67,13 @@ optimise by merging vertices
 
 -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
 
+	selection doesn't work correctly in top-down or bottom-up views
+
+-=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
+
 	helpers don't work when in arrays (is it helpers or planes?)
-	planes block raycaster pick
-	bounding boxes are static
+	planes block raycaster pick???
+	bounding boxes are static???
 	xxx helper has unused param xxx
 
 -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=- -=≡ BUG ≡=-
@@ -102,3 +112,4 @@ check other object vertices
 
 Switch between "select" and "move" with ctrl
 
+save and restore colours
