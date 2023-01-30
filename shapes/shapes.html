@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Shapes</title>
+
+  <style>
+/*    body {
+      margin: 0;
+      background-color: white;
+    }*/
+
+      html,
+      body {
+          margin: 0;
+          height: 100%;
+          overflow: hidden;
+          position: relative;
+          -webkit-text-size-adjust: none;
+          /*background-color: black;*/
+          background-color: #446;
+      }
+    canvas {
+      display: block; /* prevents scrollbar */
+      position: absolute;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      left: 0px;
+      top: 0px;
+    }
+
+  </style>
+  <script id="vertexShader" type="x-shader/x-vertex">
+      varying vec3 vColor;
+    void main() {
+      vec3 sphere_pt = position;
+      vColor = color;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(sphere_pt, 1.0);
+    }
+  </script>
+
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    varying vec3 vColor;
+    void main() {
+      gl_FragColor = vec4(vColor, 0.1);
+    }
+  </script>
+
+  <script src="../three-r142/three.js"></script>
+
+  <script src="../three-r142/TeapotBufferGeometry.js"></script>
+  <script src="../three-r142/OBJLoader.js"></script>
+  <script src="../three-r142/GLTFLoader.js"></script>
+
+  <script src="js/utils.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/particles.js"></script>
+  <!--<script src="js/wave.js"></script>-->
+  <script src="js/geometry.js"></script>
+</head>
+<body>
+
+</body>
+</html>
